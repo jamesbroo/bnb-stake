@@ -40,7 +40,7 @@ const AccountButton: React.FC<AccountButtonProps> = ({text}) => {
           {buttonText}
         </Button>
       ) : (
-        <Button onClick={onPresentAccountModal} className="shinyButtonSecondary">
+        <Button className="shinyButtonSecondary">
           <div className="account">
             <Davatar size={20} address={account} />
             <span>{ensName || shorten(account)}</span>

@@ -22,5 +22,9 @@ export const getFullDisplayBalance = (balance: BigNumber, decimals = 18, isTrunc
 };
 
 export function getBalance(balance: BigNumber, decimals = 18): number {
-  return Number(balance.div(BigNumber.from(10).pow(decimals)));
+  return Number(balance?.div(BigNumber.from(10).pow(decimals)));
+}
+
+export function getBalanceAccuracy(balance: BigNumber, decimals = 18, accuracy: number): number {
+  return Number(balance?.div(BigNumber.from(10).pow(decimals-accuracy)));
 }

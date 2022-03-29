@@ -163,7 +163,7 @@ const Nav = () => {
             <Typography variant="h6" color="inherit" noWrap style={{flexGrow: '0'}} className={classes.toolbarTitle}>
               {/* <a className={ classes.brandLink } href="/">Bul Finance</a> */}
               <Link to="/" color="inherit" className={classes.brandLink}>
-                <img alt="BASH STAKE" src={bombLogo} height="60px" />
+                <img alt="BNB STAKE" src={bombLogo} height="60px" />
               </Link>
             </Typography>
             {/* <Box style={{paddingLeft: '15px', paddingTop: '10px', fontSize: '1rem', flexGrow: '1'}}>

@@ -19,7 +19,7 @@ import MetamaskFox from '../../assets/img/metamask-fox.svg';
 import { Box, Button, Card, CardContent, Grid, Paper, Typography } from '@material-ui/core';
 import ZapModal from '../Bank/components/ZapModal';
 import BUL_BNBZapModal from '../Bank/components/BUL_BNBZapModal';
-import { Alert } from '@material-ui/lab';
+import { Alert, Skeleton } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core/styles';
 import useBulFinance from '../../hooks/useBulFinance';
 import { ReactComponent as IconTelegram } from '../../assets/img/telegram.svg';
@@ -32,7 +32,7 @@ import { useQueryParam, StringParam } from 'use-query-params';
 
 
 import kycLogo from '../../assets/img/KYC_assure.png';
-import HomeImage from '../../assets/img/background.jpg';
+import HomeImage from '../../assets/img/bg6.gif';
 import { DriveEtaOutlined } from '@material-ui/icons';
 import useApprove, {ApprovalState} from '../../hooks/useApprove';
 import Stake from '../Bank/components/Stake';
@@ -40,8 +40,10 @@ import { addTransaction } from '../../state/transactions/actions';
 import useWallet from 'use-wallet';
 import {ReactComponent as IconCopy} from '../../assets/img/copy.svg';
 import { isAddress } from 'ethers/lib/utils';
-import usePlanInfo from '../../hooks/useBashStake';
-
+// import usePlanInfo from '../../hooks/useBashStake';
+import useGetPercent, { useGetUserAmountOfDeposits, useGetUserAvailable, useGetUserTotalDeposits, useTotalStaked, useUserTotalDeposits } from '../../hooks/useBnbStake';
+import { getBalance, getBalanceAccuracy } from '../../utils/formatBalance';
+import DepositCard from './DepositCard';
 
 
 export const BackgroundImage = createGlobalStyle`
@@ -54,7 +56,7 @@ export const BackgroundImage = createGlobalStyle`
   }
 `;
 
-const TITLE = 'BASH STAKE'
+const TITLE = 'BNB STAKE'
 
 const Row = styled.div`
     display: flex;
@@ -84,7 +86,7 @@ const StakeBtn = styled.button`
   width: 100%;
   height: 48px;
   border-radius: 8px;
-  margin-top: 4px;
+  margin-top: 36px;
   cursor: pointer;
 `
 
@@ -154,9 +156,16 @@ const Home = () => {
   const bulshareStats = usebulshareStats();
   const tBondStats = useBondStats();
   const bombFinance = useBulFinance();
-  const [approveStatus, approve] = useApprove(bombFinance.BASH, bombFinance.BASH_STAKE.address);
+  // const [approveStatus, approve] = useApprove(bombFinance.BNB, bombFinance.BASH_STAKE.address);
   const { account, connect } = useWallet();
   const [val, setVal] = useState('');
+  const [val2, setVal2] = useState('');
+  const [val3, setVal3] = useState('');
+  const [val4, setVal4] = useState('');
+  const [val5, setVal5] = useState('');
+  const [val6, setVal6] = useState('');
+
+
 
   const cookies = new Cookies();
   const [ref, setNum] = useQueryParam('ref', StringParam);
@@ -183,13 +192,79 @@ const Home = () => {
     async () => {
       const tx = await bombFinance.invest(cref, 0, val);
       addTransaction(tx, {
-        summary: `Invest  ${Number(val).toFixed(2)} Bash to  ${0} Plan`,
+        summary: `Invest  ${Number(val).toFixed(2)} BNB to  ${0} Plan`,
       });
     },
     [bombFinance, addTransaction, val, cref],
   );
 
+  const handleInvest2 = useCallback(
+    async () => {
+      const tx = await bombFinance.invest(cref, 1, val2);
+      addTransaction(tx, {
+        summary: `Invest  ${Number(val2).toFixed(2)} BNB to  ${2} Plan`,
+      });
+    },
+    [bombFinance, addTransaction, val2, cref],
+  );
+
+  const handleInvest3 = useCallback(
+    async () => {
+      const tx = await bombFinance.invest(cref, 2, val3);
+      addTransaction(tx, {
+        summary: `Invest  ${Number(val3).toFixed(2)} BNB to  ${3} Plan`,
+      });
+    },
+    [bombFinance, addTransaction, val3, cref],
+  );
+
+  const handleInvest4 = useCallback(
+    async () => {
+      const tx = await bombFinance.invest(cref, 3, val4);
+      addTransaction(tx, {
+        summary: `Invest  ${Number(val4).toFixed(2)} BNB to  ${4} Plan`,
+      });
+    },
+    [bombFinance, addTransaction, val4, cref],
+  );
+
+  const handleInvest5 = useCallback(
+    async () => {
+      const tx = await bombFinance.invest(cref, 4, val5);
+      addTransaction(tx, {
+        summary: `Invest  ${Number(val5).toFixed(2)} BNB to  ${5} Plan`,
+      });
+    },
+    [bombFinance, addTransaction, val5, cref],
+  );
+
+  const handleInvest6 = useCallback(
+    async () => {
+      const tx = await bombFinance.invest(cref, 5, val6);
+      addTransaction(tx, {
+        summary: `Invest  ${Number(val6).toFixed(2)} BNB to  ${6} Plan`,
+      });
+    },
+    [bombFinance, addTransaction, val6, cref],
+  );
+
+  const handleWithdraw = useCallback(
+    async () => {
+      console.log('debug with')
+      const tx = await bombFinance.withdraw();
+      addTransaction(tx, {
+        summary: `Withdraw`,
+      });
+    },
+    [bombFinance, addTransaction],
+  );
+
   const handleChange = useCallback( e => setVal(e.currentTarget.value));
+  const handleChange2 = useCallback( e => setVal2(e.currentTarget.value));
+  const handleChange3 = useCallback( e => setVal3(e.currentTarget.value));
+  const handleChange4 = useCallback( e => setVal4(e.currentTarget.value));
+  const handleChange5 = useCallback( e => setVal5(e.currentTarget.value));
+  const handleChange6 = useCallback( e => setVal6(e.currentTarget.value));
 
   let bomb;
   let dshare;
@@ -201,8 +276,6 @@ const Home = () => {
     dshare = bulshareProd;
   }
 
-  const planInfo = usePlanInfo(0);
-  console.log('debug plan info', planInfo)
   const buyDgnAddress =
      'https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=' +
     // 'https://app.bogged.finance/bsc/swap?tokenIn=BNB&tokenOut=' +
@@ -282,9 +355,20 @@ const Home = () => {
         setText("Copy"); 
     }, 1000);
 }
-
-
-
+const plan0Percent = useGetPercent(0);
+const plan1Percent = useGetPercent(1);
+const plan2Percent = useGetPercent(2);
+const plan3Percent = useGetPercent(3);
+const plan4Percent = useGetPercent(4);
+const plan5Percent = useGetPercent(5);
+const totalStaked = useTotalStaked();
+const userTotalDeposits = useGetUserTotalDeposits();
+const userAvailable = useGetUserAvailable()
+const userDepositNumber = useGetUserAmountOfDeposits();
+let userDepositIndexes = []
+for(let i = 0; i < userDepositNumber?.toNumber(); i++) {
+  userDepositIndexes.push(i);
+}
   return (
     <Page>
       <Helmet>
@@ -296,7 +380,7 @@ const Home = () => {
         <Grid item xs={12} sm={8}>
           <Paper>
             <Box p={4} style={{ textAlign: 'center' }}>
-              <h2>Welcome to BASH STAKE</h2>
+              <h2>Welcome to BNB STAKE</h2>
               <p>
                 Total income: based on your tarrif plan (from 5% to 8% daily)
               </p>
@@ -339,7 +423,12 @@ const Home = () => {
           sm={4}
           style={{ display: 'flex', justifyContent: 'center', verticalAlign: 'middle', overflow: 'hidden' }}
         >
-          <img src={BulImage} alt='BASH STAKE' style={{ maxHeight: '240px' }} />
+          <Col>
+            <p style={{color: "white"}}> Total Staked BNB</p>
+            {totalStaked ? (<h1> {getBalance(totalStaked)} BNB </h1>) : (<Skeleton type="text" />)}
+            {/* <p style={{color: "white"}}> Total Contract Balance</p>
+            {totalStaked ? (<h1> {getBalance(totalStaked)} BNB </h1>) : (<Skeleton type="text" />)} */}
+          </Col>
         </Grid>
 
         {/* Plan1 */}
@@ -353,42 +442,43 @@ const Home = () => {
               <Row>
                 <Box mt={3}>
                   <p> daily profit</p>
-                  <h2> 0 % </h2>
+                  {plan0Percent ? (<h2> {plan0Percent.toString()} % </h2>) : (<Skeleton type="text" />)}
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
-                </Box>
-              </Row>
-              <Row>
-                <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 0 % </h2>
-                </Box>
-                <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> Total Return</p>
+                  <h2> {plan0Percent * 14} % </h2>
                 </Box>
               </Row>
               <Row>
                 <Box mt={3}>
-                  <p> daily profit</p>
+                  <p> Withdraw Time</p>
+                  <h2> Any Time </h2>
+                </Box>
+                <Box mt={3}>
+                  <p> Days</p>
+                  <h2> 14 </h2>
+                </Box>
+              </Row>
+              <Row>
+                <Box mt={3}>
+                  <p> Enter Amount</p>
                   <Input placeholder='0' onChange={handleChange}/>
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> In 14days you will get</p>
+                  <h2> {val * plan0Percent * 14} BNB </h2>
                 </Box>
               </Row>
-              {
+              {/* {
                 approveStatus !== ApprovalState.APPROVED ? (
                   <StakeBtn
                   onClick={approve}
                   > Approve </StakeBtn>
                 ) : (
-                  <StakeBtn onClick={handleInvest}> STAKE BASH </StakeBtn>
+                  <StakeBtn onClick={handleInvest}> STAKE BNB </StakeBtn>
                 )
-              }
+              } */}
+              <StakeBtn onClick={handleInvest}> STAKE BNB </StakeBtn>
             </CardContent>
             
           </Card>
@@ -401,37 +491,37 @@ const Home = () => {
               <span> Plan2 </span>
             </div>
             <CardContent align="center" style={{ position: 'relative' }}>
-              <Row>
+            <Row>
                 <Box mt={3}>
                   <p> daily profit</p>
-                  <h2> 0 % </h2>
+                  {plan1Percent ? (<h2> {plan1Percent.toString()} % </h2>) : (<Skeleton type="text" />)}
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
-                </Box>
-              </Row>
-              <Row>
-                <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 0 % </h2>
-                </Box>
-                <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> Total Return</p>
+                  <h2> {plan1Percent * 21} % </h2>
                 </Box>
               </Row>
               <Row>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <Input placeholder='0' />
+                  <p> Withdraw Time</p>
+                  <h2> Any Time </h2>
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> Days</p>
+                  <h2> 21 </h2>
                 </Box>
               </Row>
-              <StakeBtn>STAKE BASH</StakeBtn>
+              <Row>
+                <Box mt={3}>
+                  <p> Enter Amount</p>
+                  <Input placeholder='0' onChange={handleChange2}/>
+                </Box>
+                <Box mt={3}>
+                  <p> In 21 days you will get</p>
+                  <h2> {val2 * plan1Percent * 21} BNB </h2>
+                </Box>
+              </Row>
+              <StakeBtn onClick={handleInvest2}>STAKE BNB</StakeBtn>
             </CardContent>
             
           </Card>
@@ -447,34 +537,34 @@ const Home = () => {
               <Row>
                 <Box mt={3}>
                   <p> daily profit</p>
-                  <h2> 0 % </h2>
+                  {plan2Percent ? (<h2> {plan2Percent.toString()} % </h2>) : (<Skeleton type="text" />)}
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> Total Return</p>
+                  <h2> {plan2Percent * 28} % </h2>
                 </Box>
               </Row>
               <Row>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 0 % </h2>
+                  <p> Withdraw Time</p>
+                  <h2> End of Plan </h2>
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> Days</p>
+                  <h2> 28 </h2>
                 </Box>
               </Row>
               <Row>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <Input placeholder='0' />
+                  <p> Enter Amount</p>
+                  <Input placeholder='0' onChange={handleChange3}/>
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> In 28 days you will get</p>
+                  <h2> {val3 * plan2Percent * 28} BNB </h2>
                 </Box>
               </Row>
-              <StakeBtn>STAKE BASH</StakeBtn>
+              <StakeBtn onClick={handleInvest3}>STAKE BNB</StakeBtn>
             </CardContent>
             
           </Card>
@@ -487,37 +577,37 @@ const Home = () => {
               <span> Plan4 </span>
             </div>
             <CardContent align="center" style={{ position: 'relative' }}>
-              <Row>
+            <Row>
                 <Box mt={3}>
                   <p> daily profit</p>
-                  <h2> 0 % </h2>
+                  {plan3Percent ? (<h2> {plan3Percent.toString()} % </h2>) : (<Skeleton type="text" />)}
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
-                </Box>
-              </Row>
-              <Row>
-                <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 0 % </h2>
-                </Box>
-                <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> Total Return</p>
+                  <h2> {Math.pow(1+plan3Percent/100, 14)*100} % </h2>
                 </Box>
               </Row>
               <Row>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <Input placeholder='0' />
+                  <p> Withdraw Time</p>
+                  <h2> End of Plan </h2>
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> Days</p>
+                  <h2> 14 </h2>
                 </Box>
               </Row>
-              <StakeBtn>STAKE BASH</StakeBtn>
+              <Row>
+                <Box mt={3}>
+                  <p> Enter Amount</p>
+                  <Input placeholder='0' onChange={handleChange4}/>
+                </Box>
+                <Box mt={3}>
+                  <p> In 14 days you will get</p>
+                  <h2> {Number.parseFloat(val4 * Math.pow(1+plan3Percent/100, 14)).toFixed(3)} BNB </h2>
+                </Box>
+              </Row>
+              <StakeBtn onClick={handleInvest4}>STAKE BNB</StakeBtn>
             </CardContent>
             
           </Card>
@@ -530,37 +620,37 @@ const Home = () => {
               <span> Plan5 </span>
             </div>
             <CardContent align="center" style={{ position: 'relative' }}>
-              <Row>
+            <Row>
                 <Box mt={3}>
                   <p> daily profit</p>
-                  <h2> 0 % </h2>
+                  {plan4Percent ? (<h2> {plan4Percent.toString()} % </h2>) : (<Skeleton type="text" />)}
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
-                </Box>
-              </Row>
-              <Row>
-                <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 0 % </h2>
-                </Box>
-                <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> Total Return</p>
+                  <h2> {Math.pow(1+plan4Percent/100, 21)*100} % </h2>
                 </Box>
               </Row>
               <Row>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <Input placeholder='0' />
+                  <p> Withdraw Time</p>
+                  <h2> End of Plan </h2>
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> Days</p>
+                  <h2> 21 </h2>
                 </Box>
               </Row>
-              <StakeBtn>STAKE BASH</StakeBtn>
+              <Row>
+                <Box mt={3}>
+                  <p> Enter Amount</p>
+                  <Input placeholder='0' onChange={handleChange5}/>
+                </Box>
+                <Box mt={3}>
+                  <p> In 21 days you will get</p>
+                  <h2> {Number.parseFloat(val5 * Math.pow(1+plan4Percent/100, 21)).toFixed(3)} BNB </h2>
+                </Box>
+              </Row>
+              <StakeBtn onClick={handleInvest5}>STAKE BNB</StakeBtn>
             </CardContent>
             
           </Card>
@@ -573,37 +663,37 @@ const Home = () => {
               <span> Plan6 </span>
             </div>
             <CardContent align="center" style={{ position: 'relative' }}>
-              <Row>
+            <Row>
                 <Box mt={3}>
                   <p> daily profit</p>
-                  <h2> 0 % </h2>
+                  {plan5Percent ? (<h2> {plan5Percent.toString()} % </h2>) : (<Skeleton type="text" />)}
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
-                </Box>
-              </Row>
-              <Row>
-                <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 0 % </h2>
-                </Box>
-                <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> Total Return</p>
+                  <h2> {Math.pow(1+plan5Percent/100, 28)*100} % </h2>
                 </Box>
               </Row>
               <Row>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <Input placeholder='0' />
+                  <p> Withdraw Time</p>
+                  <h2> End of Plan </h2>
                 </Box>
                 <Box mt={3}>
-                  <p> daily profit</p>
-                  <h2> 1 % </h2>
+                  <p> Days</p>
+                  <h2> 28 </h2>
                 </Box>
               </Row>
-              <StakeBtn>STAKE BASH</StakeBtn>
+              <Row>
+                <Box mt={3}>
+                  <p> Enter Amount</p>
+                  <Input placeholder='0' onChange={handleChange6}/>
+                </Box>
+                <Box mt={3}>
+                  <p> In 28days you will get</p>
+                  <h2> {Number.parseFloat(val6 * Math.pow(1+plan5Percent/100, 28)).toFixed(3)} BNB </h2>
+                </Box>
+              </Row>
+              <StakeBtn onClick={handleInvest6}>STAKE BNB</StakeBtn>
             </CardContent>
             
           </Card>
@@ -630,17 +720,17 @@ const Home = () => {
             <CardContent align="center" style={{ position: 'relative' }}>
               <Row>
                 <Box mt={3}>
-                  <p> Total Staked BASH</p>
-                  <h2> 0  </h2>
+                  <p> Total Staked BNB</p>
+                  {userTotalDeposits ? (<h1> {getBalanceAccuracy(userTotalDeposits,18,3) / 1000} BNB </h1>) : (<Skeleton type="text" />)}
                 </Box>
               </Row>
               <Row>
                 <Box mt={3}>
-                  <p> Available Bash for withdrwal</p>
-                  <h2> 0  </h2>
+                  <p> Available BNB for withdrwal</p>
+                  {userAvailable ? (<h1> {getBalanceAccuracy(userAvailable,18,3) / 1000} BNB </h1>) : (<Skeleton type="text" />)}
                 </Box>
               </Row>
-              <StakeBtn>STAKE BASH</StakeBtn>
+              <StakeBtn onClick={handleWithdraw}>Withdrw BNB</StakeBtn>
             </CardContent>
           </Card>
         </Grid>
@@ -670,7 +760,7 @@ const Home = () => {
                   <h2> 0 </h2>
                 </Col>
                 <Col>
-                  <p> Earn for promotion BASH stake </p>
+                  <p> Earn for promotion BNB stake </p>
                   <p> You will receive: </p>
                   <p>
                     5% from each level 1 referral depositss
@@ -683,7 +773,15 @@ const Home = () => {
             </Box>
           </Paper>
         </Grid>
+        
+        { userDepositNumber && 
+        (userDepositIndexes.map(index => {
+            return(
+              <DepositCard id={index} />
+            )
+        }))
 
+        }
       </Grid>
             
     </Page>

@@ -66,7 +66,7 @@ export class BulFinance {
     // Uniswap V2 Pair
     this.BULWBNB_LP = new Contract(externalTokens['DGN-BNB-LP'][0], IUniswapV2PairABI, provider);
     
-    this.BASH_STAKE = new Contract(externalTokens['BASH_STAKE'][0], BashStakeABI, provider);
+    this.BASH_STAKE = new Contract(externalTokens['BASH-STAKE'][0], BashStakeABI, provider);
     this.config = cfg;
     this.provider = provider;
   }
@@ -476,7 +476,8 @@ export class BulFinance {
 
   async invest(referrer: string, plan: number, amount: string | number): Promise<TransactionResponse> {
     const {BashStake} = this.contracts;
-    return await BashStake.invest(referrer, plan, decimalToBalance(amount));
+    console.log('debug bash stake', BashStake)
+    return await BashStake.invest(referrer, plan, { value: decimalToBalance(amount) });
   }
 
   async withdraw(): Promise<TransactionResponse> {
@@ -494,14 +495,29 @@ export class BulFinance {
     return BashStake.getResult(plan, deposit);
   }
 
-  async getUserAmountOfDeposits(address: string): Promise<BigNumber> {
+  async getPercent(index : string | number): Promise<number> {
     const {BashStake} = this.contracts;
-    return BashStake.getUserAmountOfDeposits(address);
+    return BashStake.getPercent(index);
+  }
+
+  async totalStaked(): Promise<BigNumber> {
+    const {BashStake} = this.contracts;
+    return BashStake.totalStaked();
+  }
+
+  async getUserTotalDeposits(address: string): Promise<BigNumber> {
+    const {BashStake} = this.contracts;
+    return BashStake.getUserTotalDeposits(address);
   }
 
   async getUserAvailable(address: string): Promise<BigNumber> {
     const {BashStake} = this.contracts;
     return BashStake.getUserAvailable(address);
+  }
+
+  async getUserAmountOfDeposits(address: string): Promise<BigNumber> {
+    const {BashStake} = this.contracts;
+    return BashStake.getUserAmountOfDeposits(address);
   }
 
   async getUserDepositInfo(address: string, index : string | number): Promise<DepositInfo> {
