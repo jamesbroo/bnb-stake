@@ -446,7 +446,7 @@ for(let i = 0; i < userDepositNumber?.toNumber(); i++) {
                 </Box>
                 <Box mt={3}>
                   <p> Total Return</p>
-                  <h2> {plan0Percent * 14} % </h2>
+                  <h2> {Number.parseFloat(plan0Percent * 14).toFixed(3) } % </h2>
                 </Box>
               </Row>
               <Row>
@@ -466,7 +466,7 @@ for(let i = 0; i < userDepositNumber?.toNumber(); i++) {
                 </Box>
                 <Box mt={3}>
                   <p> In 14days you will get</p>
-                  <h2> {val * plan0Percent * 14} BNB </h2>
+                  <h2> {Number.parseFloat(val * plan0Percent * 14 / 100).toFixed(3) } BNB </h2>
                 </Box>
               </Row>
               {/* {
@@ -498,7 +498,7 @@ for(let i = 0; i < userDepositNumber?.toNumber(); i++) {
                 </Box>
                 <Box mt={3}>
                   <p> Total Return</p>
-                  <h2> {plan1Percent * 21} % </h2>
+                  <h2> {Number.parseFloat(plan1Percent * 21).toFixed(3) } % </h2>
                 </Box>
               </Row>
               <Row>
@@ -518,7 +518,7 @@ for(let i = 0; i < userDepositNumber?.toNumber(); i++) {
                 </Box>
                 <Box mt={3}>
                   <p> In 21 days you will get</p>
-                  <h2> {val2 * plan1Percent * 21} BNB </h2>
+                  <h2> {Number.parseFloat(val2 * plan1Percent * 21 / 100).toFixed(3) } BNB </h2>
                 </Box>
               </Row>
               <StakeBtn onClick={handleInvest2}>STAKE BNB</StakeBtn>
@@ -541,7 +541,7 @@ for(let i = 0; i < userDepositNumber?.toNumber(); i++) {
                 </Box>
                 <Box mt={3}>
                   <p> Total Return</p>
-                  <h2> {plan2Percent * 28} % </h2>
+                  <h2> {Number.parseFloat(plan2Percent * 28).toFixed(3) } % </h2>
                 </Box>
               </Row>
               <Row>
@@ -561,7 +561,7 @@ for(let i = 0; i < userDepositNumber?.toNumber(); i++) {
                 </Box>
                 <Box mt={3}>
                   <p> In 28 days you will get</p>
-                  <h2> {val3 * plan2Percent * 28} BNB </h2>
+                  <h2> {Number.parseFloat(val3 * plan2Percent * 28 / 100).toFixed(3)} BNB </h2>
                 </Box>
               </Row>
               <StakeBtn onClick={handleInvest3}>STAKE BNB</StakeBtn>
@@ -584,7 +584,7 @@ for(let i = 0; i < userDepositNumber?.toNumber(); i++) {
                 </Box>
                 <Box mt={3}>
                   <p> Total Return</p>
-                  <h2> {Math.pow(1+plan3Percent/100, 14)*100} % </h2>
+                  <h2> {Number.parseFloat(Math.pow(1+plan3Percent/100, 14)*100).toFixed(3) } % </h2>
                 </Box>
               </Row>
               <Row>
@@ -627,7 +627,7 @@ for(let i = 0; i < userDepositNumber?.toNumber(); i++) {
                 </Box>
                 <Box mt={3}>
                   <p> Total Return</p>
-                  <h2> {Math.pow(1+plan4Percent/100, 21)*100} % </h2>
+                  <h2> {Number.parseFloat(Math.pow(1+plan4Percent/100, 21)*100).toFixed(3) } % </h2>
                 </Box>
               </Row>
               <Row>
@@ -670,7 +670,7 @@ for(let i = 0; i < userDepositNumber?.toNumber(); i++) {
                 </Box>
                 <Box mt={3}>
                   <p> Total Return</p>
-                  <h2> {Math.pow(1+plan5Percent/100, 28)*100} % </h2>
+                  <h2> {Number.parseFloat(Math.pow(1+plan5Percent/100, 28)*100).toFixed(3) } % </h2>
                 </Box>
               </Row>
               <Row>
